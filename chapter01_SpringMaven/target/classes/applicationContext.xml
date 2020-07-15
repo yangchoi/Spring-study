@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 
+	scope="prototype"
+			"request"
+			"session"
+			"singleton"
+	 -->
+	<!-- 이건 클래스에서 직접 어노테이션으로 설정해주었다. 그 대신 아래의 코드처럼 어떤 어노테이션을 어디서 쓰고 있는지 알려줘야한다. 
+	<bean id="messageBean" class="sample03.MessageBeanKo" scope="prototype">
+	</bean>
+	 -->
+	 <context:component-scan base-package="sample03" />
+	 <context:component-scan base-package="sample04" />
+	 <context:component-scan base-package="sample05" />
+</beans>
