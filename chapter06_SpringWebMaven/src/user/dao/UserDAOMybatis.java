@@ -1,5 +1,8 @@
 package user.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,5 +37,28 @@ public class UserDAOMybatis implements UserDAO{
 		sqlSession.delete("userSQL.delete", id);
 		
 	}
+   
+	// 출력
+	@Override
+	public List<UserDTO> getUserList() {
+		
+		return sqlSession.selectList("userSQL.getUserList");
+	}
+
+	// 수정 값 가져오기 
+	@Override
+	public UserDTO getUser() {
+		return sqlSession.selectOne("userSQL.getUser");
+	}
+
+	// 수정 
+	
+	@Override
+	public void modify(UserDTO userDTO) {
+		sqlSession.update("userSQL.modify", userDTO);
+		
+	}
+	
+	
 
 }

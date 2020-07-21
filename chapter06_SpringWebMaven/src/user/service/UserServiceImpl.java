@@ -1,8 +1,12 @@
 package user.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.sf.json.JSONObject;
 import user.bean.UserDTO;
 import user.dao.UserDAO;
 
@@ -34,5 +38,26 @@ public class UserServiceImpl implements UserService{
 		userDAO.delete(id);
 		
 	}
-	
+
+	@Override
+	public List<UserDTO> getUserList() {
+		return userDAO.getUserList();
+	}
+
+	@Override
+	public void modify(UserDTO userDTO) {
+		userDAO.modify(userDTO);
+		
+	}
+
+	@Override
+	public UserDTO getUser(String id) {
+		
+		return userDAO.checkId(id);
+	}
+
+
+
+
+
 }

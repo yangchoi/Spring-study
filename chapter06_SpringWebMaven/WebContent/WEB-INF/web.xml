@@ -24,7 +24,7 @@
   	<servlet-name>dispatcherServlet</servlet-name>
   	<url-pattern>/</url-pattern>
   </servlet-mapping>
-  
+  <!-- 아래의 코드로는 요청은 한글처리 해주나 요청은 한글 처리를 해주지 않는다.  -->
   <filter>
   	<filter-name>encodingFilter</filter-name>
   	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -35,7 +35,7 @@
   </filter>
   <filter-mapping>
   	<filter-name>encodingFilter</filter-name>
-  	<url-pattern>/*</url-pattern>
+  	<url-pattern>/</url-pattern>
   </filter-mapping>
   
   <welcome-file-list>

@@ -7,16 +7,57 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
+
+	<context:component-scan base-package="main.controller"/>
+	<context:component-scan base-package="user.controller"/>
+	
+	<!-- 다른 실습 -->
+	<context:component-scan base-package="hello.controller"/>
+	
+	
+	<!-- Spring web MVC를 하기 위해 설정해야 하는 값들이 자동으로 추가됨 -->
+	<!--  controller로 가지말고 js 폴더로 가게 한다.  -->
+	
+	<!-- 응답에 대한 한글처리 -->
+<!-- 	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/json; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven> -->
+	
+	<!-- 어노테이션 이용 -->
+	<!-- JSON -->
+	<mvc:annotation-driven />
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<property name="contentType" value="text/html;charset=UTF-8" />
+	</bean>
+		
+	<bean id="beanNameViewResolver"
+	      class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0" />	      
+		<!-- 우선순위 줌 -->
+	</bean>
+	
+	
+	<mvc:resources location="/js/" mapping="/js/**" />
+	
 	<bean id="viewResolver" 
 	      class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	
-	<context:component-scan base-package="main.controller"/>
-	<context:component-scan base-package="user.controller"/>
-	
-	<!-- Spring web MVC를 하기 위해 설정해야 하는 값들이 자동으로 추가됨 -->
-	<!--  controller로 가지말고 js 폴더로 가게 한다.  -->
-	<mvc:annotation-driven />
-	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
 </beans>
