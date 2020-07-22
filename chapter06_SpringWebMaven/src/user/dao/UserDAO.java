@@ -14,8 +14,9 @@ public interface UserDAO {
 	public void delete(String id);
 	
 	public List<UserDTO> getUserList();
-	
-	public UserDTO getUser();
+
+	public UserDTO getUser(String id);
 
 	public void modify(UserDTO userDTO);
+
 }

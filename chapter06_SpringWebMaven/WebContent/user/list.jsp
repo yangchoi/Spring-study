@@ -13,7 +13,16 @@
   <th width="100">아이디</th>
   <th width="100">비밀번호</th>
  </tr>
-
+ 
+ <div class="search">
+ 	<select name="searchOption" id="searchOption">
+ 		<option value="">선택
+ 		<option value="name">이름
+ 		<option value="id">아이디
+ 	</select>
+ 	<input type="text" id="searchText" name="searchText">
+ 	<button id="searchBtn">검색</button>
+ </div>
 </table>
 
 </body>
@@ -46,6 +55,22 @@ $(document).ready(function(){
 		}
 		
 	});
+});
+
+// 검색기능 
+$('#searchBtn').click(function(){
+	$('#searchText').empty();
+	
+	if($('#searchOption').val() == ''){
+		$('#searchText').text('검색 옵션을 먼저 선택해주세요.');
+	}
+	
+	// 검색 버튼을 눌렀을 때..
+	if($('searchText').val() == ''){
+		$('#searchText').text('검색값을 입력해주세요.');
+	}else {
+		$('#searchOption').trigger('click');
+		// searchOption
 });
 </script>
 

@@ -16,11 +16,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from usertable
 	</select>
 	<!-- 사람잡기-->
-	<select id="getUser" parameterType="String" resultType="int">
-		select count(*) from usertable where id=#{id}
+	<select id="getUser" parameterType="String" resultType="user">
+		select * from usertable where id=#{id}
 	</select>
 	<!-- 수정 -->
-	<update id="modify" parameterType="java.util.Map">
+	<update id="modify" parameterType="user">
 		update usertable set name=#{name}, pwd=#{pwd} where id=#{id}
 	</update>
 

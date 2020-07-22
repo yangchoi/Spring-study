@@ -47,8 +47,8 @@ public class UserDAOMybatis implements UserDAO{
 
 	// 수정 값 가져오기 
 	@Override
-	public UserDTO getUser() {
-		return sqlSession.selectOne("userSQL.getUser");
+	public UserDTO getUser(String id) {
+		return sqlSession.selectOne("userSQL.getUser", id); // id를 가지고 가야한다. 
 	}
 
 	// 수정 
