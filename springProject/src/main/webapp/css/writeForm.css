@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+* {
+	font-family: 'Jeju Gothic', sans-serif;
+	color : black;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td {
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+#zipcode, #addr1, #addr2 {
+	margin-bottom: 5px;
+}
+
+#button0, #button1, #button2, #button3, #button4, #button5, #button6 {
+	text-align: center;
+	background-color: white;
+	color: black;
+	border: 2px solid #009933;
+}
+
+#button0:hover {
+	background-color: #009933;
+	color: white;
+}
+
+#button1:hover {
+	background-color: #009933;
+	color: white;
+}
+
+#button2:hover {
+	background-color: #009933;
+	color: white;
+}
+
+#button3:hover {
+	background-color: #009933;
+	color: white;
+}
+#button4:hover {
+	background-color: #009933;
+	color: white;
+}
+#button5:hover {
+	background-color: #009933;
+	color: white;
+}
+#button6:hover {
+	background-color: #009933;
+	color: white;
+}
