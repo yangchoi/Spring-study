@@ -48,8 +48,8 @@ th, td {
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-					 <input type="button" class="button" id="loginBtn" value="로그인"> &emsp; 
-					 <input type="button" class="button2" id="writeBtn" value="회원가입" onclick="location.href='/springProject/member/writeForm'"></td>
+					 <input type="button" id="loginBtn" value="로그인"> &emsp; 
+					 <input type="button" value="회원가입" onclick="location.href='/springProject/member/writeForm'"></td>
 				<td>
 			</tr>
 		</table>

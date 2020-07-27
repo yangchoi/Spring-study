@@ -11,13 +11,13 @@ onclick="location.href='/springProject/main/index'" style="cursor: pointer;"> Sp
 </c:if>
 
 <c:if test="${memId != null }">
-	<a href="../board/boardWriteForm.do">글쓰기</a> &emsp;
+	<a href="../board/boardWriteForm">글쓰기</a> &emsp;
 	<c:if test="${memId == 'admin'}">
-	<a href="../imageBoard/imageBoardWriteForm.do">이미지등록</a> &emsp;
+	<a href="../imageBoard/imageBoardWriteForm">이미지등록</a> &emsp;
 	</c:if>
 </c:if>
 
-<a href="../board/boardList.do?pg=1">목록</a> &emsp;
+<a href="../board/boardList">목록</a> &emsp;
 <c:if test="${memId == 'admin'}">
-<a href="../imageBoard/imageBoardList.do?pg=1">이미지목록</a> &emsp;
+<a href="../imageBoard/imageBoardList?pg=1">이미지목록</a> &emsp;
 </c:if>

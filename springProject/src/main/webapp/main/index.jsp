@@ -16,13 +16,15 @@
 			</td>
 		</tr>
 		<tr>
-			  <td width="250" height="400" valign="top">	<jsp:include page ="../template/left.jsp" /></td>
+			  <td width="250" height="400" valign="top">	
+			  <jsp:include page ="../template/left.jsp" /></td>
 			<td>	<jsp:include page ="${display}" /></td>
 		
 		</tr>
 
 		<tr>
-			  <td colspan="2" align="center">	<jsp:include page ="../template/bottom.jsp" /></td>
+			  <td colspan="2" align="center">	
+			  <jsp:include page ="../template/bottom.jsp" /></td>
 		</tr>
 
 </table>

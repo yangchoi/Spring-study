@@ -8,4 +8,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from member where id=#{id} and pwd=#{pwd}
 	</select>
 	
+	<!-- 회원가입시 아이디 중복체크 -->
+	<select id="checkId" parameterType="String" resultType="member">
+		select * from member where id=#{id}
+	</select>
+	
+	<!-- 회원가입 시 우편번호 찾기 -->
+	<select id="postSearch" parameterType="java.util.Map" resultType="zipcode">
+		select * from newzipcode
+		where sido like '%'||#{sido}||'%'
+		and nvl(sigungu, '0') like '%'||#{sigungu}||'%'
+		and roadname like '%'||#{roadname}||'%'
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="write" parameterType="member">
+		insert into member values(#{name}, 
+								#{id},
+								#{pwd},
+								#{gender},
+								#{email1},
+								#{email2},
+								#{tel1},
+								#{tel2},
+								#{tel3},
+								#{zipcode},
+								#{addr1},
+								#{addr2},
+								SYSDATE)
+		
+	</insert>
+
+	
+	<!-- 회원정보 수정 -->
+	<update id="modify" parameterType="member">
+		update member SET name=#{name},
+						pwd=#{pwd},
+						gender=#{gender},
+						email1=#{email1},
+						email2=#{email2},
+						tel1=#{tel1},
+						tel2=#{tel2},
+						tel3=#{tel3},
+						zipcode=#{zipcode},
+						addr1=#{addr1},
+						addr2=#{addr2},
+						logtime=SYSDATE
+	</update>
 </mapper>

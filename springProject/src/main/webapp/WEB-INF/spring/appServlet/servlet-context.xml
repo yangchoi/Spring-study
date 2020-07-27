@@ -19,6 +19,15 @@
 	<resources mapping="/js/**" location="/js/"/>
 	<resources mapping="/css/**" location="/css/"/>
 	
+	<!-- json -->
+	<beans:bean id="jsonView" 
+	      class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<beans:property name="contentType" value="text/html;charset=UTF-8" />
+	</beans:bean>
+	<beans:bean id="beanNameViewResolver"
+	      class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="0" />	      
+	</beans:bean>
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -29,6 +38,7 @@
 	<context:component-scan base-package="com.spring.springProject" />
 	<context:component-scan base-package="main.controller" />
 	<context:component-scan base-package="member.controller" />
+	<context:component-scan base-package="board.controller" />
 	
 	
 	
