@@ -9,7 +9,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class IndexController {
 	@RequestMapping(value="/main/index", method=RequestMethod.GET)
 	public String index(Model model) {
-		model.addAttribute("display", "/template/body.jsp"); // index에 display 있으므로 위치 알려줌 
+		model.addAttribute("display", "/template/body.jsp");
 		return "/main/index";
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

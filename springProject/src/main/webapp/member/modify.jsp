@@ -2,10 +2,10 @@
     pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
-window.onload = function(){
-	alert("회원 가입 완료!")
-	location.href="/springProject/main/index"
-}
+	window.onload = function(){
+		alert("회원 정보 수정 완료!")
+		location.href="/miniProject/main/index.do"
+	}
 </script>
 
 

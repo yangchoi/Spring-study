@@ -13,30 +13,22 @@ import member.bean.ZipcodeDTO;
 
 @Repository
 @Transactional
-public class MemberDAOMybatis implements MemberDAO{
+public class MemberDAOMybatis implements MemberDAO {
 	@Autowired
 	private SqlSession sqlSession;
+
 	@Override
 	public MemberDTO login(Map<String, String> map) {
-		
 		return sqlSession.selectOne("memberSQL.login", map);
 	}
-	
+
 	@Override
 	public MemberDTO checkId(String id) {
-
 		return sqlSession.selectOne("memberSQL.checkId", id);
 	}
 
 	@Override
-	public ZipcodeDTO checkPost() {
-		
-		return sqlSession.selectOne("memberSQL.checkPost");
-	}
-
-	@Override
 	public List<ZipcodeDTO> postSearch(Map<String, String> map) {
-		
 		return sqlSession.selectList("memberSQL.postSearch", map);
 	}
 
@@ -45,12 +37,22 @@ public class MemberDAOMybatis implements MemberDAO{
 		sqlSession.insert("memberSQL.write", memberDTO);
 	}
 
-
 	@Override
 	public void modify(MemberDTO memberDTO) {
-		
 		sqlSession.update("memberSQL.modify", memberDTO);
-		
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

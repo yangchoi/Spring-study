@@ -1,14 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <script type="text/javascript">
 window.onload = function(){
-	alert("회원 가입 완료!")
-	location.href="/springProject/main/index"
+	alert("작성하신 글을 수정 하였습니다.")
+	location.href="/miniProject/board/boardList.do?pg=${pg}";
 }
 </script>
-
-
-
-
 
