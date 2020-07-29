@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper 
- PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
- "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="boardSQL">
 	<!-- 글쓰기 -->
 	<insert id="boardWrite" parameterType="java.util.Map">
-		INSERT INTO board(seq,id,name,email,subject,content,ref) 
-		values(seq_board.nextval
-			 , #{id}
-			 , #{name}
-			 , #{email}
-			 , #{subject}
-			 , #{content}
-			 , seq_board.currval)
+		insert into board(seq, id, name, email, subject, content, ref)
+		values (seq_board.nextval
+				, #{id}
+				, #{name}
+				, #{email}
+				, #{subject}
+				, #{content}
+				, seq_board.currval)
+		
 	</insert>
 	
-	<!-- 목록 -->
+	<!-- 페이징 처리  --> 
 	<select id="getBoardList" parameterType="java.util.Map" resultType="board">
 		<![CDATA[
 		select * from
 		(select rownum rn, tt.* from
-		(select * from board order by ref desc, step asc)tt
-		)where rn>=#{startNum} and rn<=#{endNum} 
+		(select seq, id, name, email, subject, content, ref, lev, step, pseq, reply, hit,
+		case
+		when to_char(logtime, 'yyyy.mm.dd') = to_char(sysdate, 'yyyy.mm.dd')
+		then to_char(logtime, 'pm hh:mi')
+		else to_char(logtime, 'yyyy.mm.dd') end logtime
+		from board
+		order by ref desc, step asc)tt)
+		where rn >= #{startNum} and rn <= #{endNum}
 		]]>
 	</select>
 	
@@ -30,29 +37,53 @@
 		<![CDATA[
 		select * from
 		(select rownum rn, tt.* from
-		(select * from board where ${searchOption} like '%'||#{keyword}||'%' 
-							 order by ref desc, step asc)tt
-		)where rn>=#{startNum} and rn<=#{endNum} 
+		(select seq, id, name, email, subject, content, ref, lev, step, pseq, reply, hit,
+		case
+		when to_char(logtime, 'yyyy.mm.dd') = to_char(sysdate, 'yyyy.mm.dd')
+		then to_char(logtime, 'pm hh:mi')
+		else to_char(logtime, 'yyyy.mm.dd') end logtime
+		from board
+		where ${searchOption} like '%'||#{keyword}||'%'
+		order by ref desc, step asc)tt)
+		where rn >= #{startNum} and rn <= #{endNum}
 		]]>
 	</select>
-	
-	<!-- 총글수 -->
-	<select id="getBoardTotalA" resultType="int">
+
+	<!-- 총 글 수 가져오기(페이징처리위해) -->
+	<select id="getBoardTotalA" resultType="int" >
 		select count(*) from board
 	</select>
 	
-	<!-- 검색 총글수 -->
-	<select id="getBoardSearchTotalA" resultType="int">
+	<!-- 검색 총 글 수 -->
+	<select id="getBoardSearchTotalA" parameterType="java.util.Map" resultType="int">
 		select count(*) from board where ${searchOption} like '%'||#{keyword}||'%'
 	</select>
+	
+	<!-- 작성한 글 확인, 글 하나만 가져옴 -->
+	<select id="getBoardView" parameterType="int" resultType="board">
+		select * from board where seq=#{seq}
+	</select>
+	
+	<!-- 답글쓰기 -->
+	<insert id="boardReply" parameterType="java.util.Map">
+		begin 
+			update board set step=step+1 where ref=#{ref} and step>#{step};
+			
+			insert into board values(seq_board.nextval
+									,#{id}
+									,#{name}
+									,#{email}
+									,#{subject}
+									,#{content}
+									,#{ref}
+									,#{lev}+1
+									,#{step}+1
+									,#{pseq}
+									,0
+									,0
+									,sysdate);
+									
+			update board set reply=reply+1 where seq=#{pseq};
+		end;
+	</insert>
 </mapper>
-
-
-
-
-
-
-
-
-
-

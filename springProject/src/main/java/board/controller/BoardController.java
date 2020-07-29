@@ -17,78 +17,153 @@ import org.springframework.web.servlet.ModelAndView;
 import board.bean.BoardDTO;
 import board.bean.BoardPaging;
 import board.service.BoardService;
+// controller에서는 직접 일 잘 안하고 일을 받아서 java에 넘기는 역할만 주로 한다.
+// 원래는 모든 일들을 service가 한다. 
+// session을 이제 얻어다 써보자..
 
 @Controller
 @RequestMapping(value="board")
 public class BoardController {
 	@Autowired
 	private BoardService boardService;
-	
+
+	// 글쓰기 
 	@RequestMapping(value="boardWriteForm", method=RequestMethod.GET)
 	public String boardWriteForm(Model model) {
 		model.addAttribute("display", "/board/boardWriteForm.jsp");
 		return "/main/index";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="boardWrite", method=RequestMethod.POST)
-	public @ResponseBody void boardWrite(@RequestParam Map<String, String> map) {
-		boardService.boardWrite(map);
-	}
-	
-	@RequestMapping(value="boardList", method=RequestMethod.GET)
-	public String boardList(@RequestParam(required = false, defaultValue = "1") String pg,
-							Model model) {
-		model.addAttribute("pg", pg);
-		model.addAttribute("display", "/board/boardList.jsp");
+	public String boardWrite(@RequestParam Map<String, String> map, Model model) {
+		
+		boardService.boardWrite(map); // subject, content
+		model.addAttribute("display", "/board/boardWrite.jsp");
+		
 		return "/main/index";
 	}
 	
+	// 글 리스트 
+	@RequestMapping(value="boardList", method=RequestMethod.GET)
+	public String boardList(@RequestParam(required=false, defaultValue="1") String pg, Model model) {
+		// 넘어오는 pg 데이터가 없어서 처음에 400 에러 발생 
+		// 데이터가 안들어오는 경우를 명시해 준다 (required=false)
+		// 그런 경우는 디폴트 값으로 1페이지로 지정함
+		model.addAttribute("pg", pg); // 페이지값 넘겨준다.
+		model.addAttribute("display", "/board/boardList.jsp");
+		
+		return "/main/index";
+		
+	}
+	
+	// 5개의 데이터 꺼내옴 
+	// 페이징 처리도 여기서 한다. 
+	@ResponseBody
 	@RequestMapping(value="getBoardList", method=RequestMethod.POST)
-	public @ResponseBody ModelAndView getBoardList(@RequestParam String pg,
-												   HttpSession session) {
+	public ModelAndView getBoardList(@RequestParam String pg, HttpSession session) {
+		// 여기서는 required는 있어도 그만 없어도 그만 
+		
 		String memId = (String) session.getAttribute("memId");
 		
-		//1페이지당 5개씩
+		
+		// 한 페이지 당 글 5개
 		List<BoardDTO> list = boardService.getBoardList(pg);
 		
-		//페이징 처리
-		BoardPaging boardPaging = boardService.boardPaging(pg);
 		
+		// 페이징 처리 
+		// 페이징 처리를 위해서 필요한 값들은 service에서 가져올 것 
+		BoardPaging boardPaging = boardService.boardPaging(pg);
+			
 		ModelAndView mav = new ModelAndView();
+		
 		mav.addObject("pg", pg);
 		mav.addObject("list", list);
 		mav.addObject("boardPaging", boardPaging);
 		mav.addObject("memId", memId);
 		mav.setViewName("jsonView");
-		return mav;
+		
+		return mav; 
+
 	}
 	
-	@RequestMapping(value="getBoardSearch", method=RequestMethod.GET)
-	public ModelAndView getBoardSearch(@RequestParam Map<String,String> map) {
+	// 검색
+	@RequestMapping(value="getBoardSearch", method=RequestMethod.POST)
+	public ModelAndView getBoardSearch(@RequestParam Map<String, String> map) {
 		List<BoardDTO> list = boardService.getBoardSearch(map);
-		System.out.println(list.size());
 		
-		//페이징 처리
+		// 페이징 처리 
 		BoardPaging boardPaging = boardService.boardPaging(map);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("pg", map.get("pg"));
 		mav.addObject("list", list);
+		mav.addObject("searchOption", map.get("searchOption"));
+		mav.addObject("keyword", map.get("keyword"));
 		mav.addObject("boardPaging", boardPaging);
 		mav.setViewName("jsonView");
+		
 		return mav;
 	}
+	
+	// 글보기 
+	@RequestMapping(value="boardView", method=RequestMethod.GET)
+	public String boardView(@RequestParam String seq, @RequestParam String pg, Model model) {
+		model.addAttribute("seq", seq);
+		model.addAttribute("pg", pg);
+		model.addAttribute("display", "/board/boardView.jsp");
+		
+		return "/main/index";
+		//ajax로 처리할 거기 때문에 boardView에서 직접 데이터를 끌고 온다. 
+		
+	}
+	
+	// 글보기 
+	@RequestMapping(value="getBoardView", method=RequestMethod.POST)
+	public ModelAndView getBoardView(@RequestParam String seq) {
+		
+		BoardDTO boardDTO = boardService.getBoardView(seq); // 딱 하나의 데이터만 가지고 옴
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("boardDTO", boardDTO); // boardDTO 보내기 
+		mav.setViewName("jsonView");
+		
+		return mav;
+	}
+	
+	/*
+	// 글 삭제 
+	@RequestMapping(value="boardDelete", method=RequestMethod.POST)
+	public String boardDelete(@RequestParam String seq, @RequestParam String pg, Model model) {
+		model.addAttribute("seq", seq);
+		model.addAttribute("pg", pg);
+		model.addAttribute("display", "/board/boardView.jsp");
+
+		return "/main/index";
+	}
+	*/
+	
+	// 댓글
+	@RequestMapping(value="boardReplyForm", method=RequestMethod.POST)
+	public String boardReplyForm(@RequestParam String seq, @RequestParam String pg, Model model) {
+		
+		model.addAttribute("pseq", seq); // 원글 번호
+		model.addAttribute("pg", pg); // 원글이 있는 페이지 번호 
+		model.addAttribute("display", "/board/boardReplyForm.jsp");
+		
+		return "/main/index";
+		
+		
+	}
+	
+	// boardReply에는 데이터가 4개 있다.
+	// boardWrite는 2개 있다(제목, 내용)
+	@RequestMapping(value="boardReply", method=RequestMethod.POST)
+	public String boardReply(@RequestParam Map<String, String> map, Model model) {
+		
+		boardService.boardReply(map);
+		// pseq, pg, subject, content
+		model.addAttribute("display", "/board/boardReply.jsp");
+		
+		return "/main/index";
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

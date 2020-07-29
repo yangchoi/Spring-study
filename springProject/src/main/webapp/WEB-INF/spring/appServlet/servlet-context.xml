@@ -14,9 +14,10 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-	<resources mapping="/image/**" location="/image/" />
-	<resources mapping="/js/**" location="/js/" />
-	<resources mapping="/css/**" location="/css/" />
+	<!-- image 경로값 -->
+	<resources mapping="/image/**" location="/image/"/>
+	<resources mapping="/js/**" location="/js/"/>
+	<resources mapping="/css/**" location="/css/"/>
 	
 	<!-- json -->
 	<beans:bean id="jsonView" 
@@ -30,20 +31,15 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!--  view는 안쓰기 때문에 지움 -->
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
 	<context:component-scan base-package="com.spring.springProject" />
-	<context:component-scan base-package="main.controller"/>
-	<context:component-scan base-package="member.controller"/>
-	<context:component-scan base-package="board.controller"/>
+	<context:component-scan base-package="main.controller" />
+	<context:component-scan base-package="member.controller" />
+	<context:component-scan base-package="board.controller" />
+	
+	
+	
 </beans:beans>
-
-
-
-
-
-
-
-
-

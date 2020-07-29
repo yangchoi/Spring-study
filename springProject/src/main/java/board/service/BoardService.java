@@ -12,10 +12,17 @@ public interface BoardService {
 
 	public List<BoardDTO> getBoardList(String pg);
 
-	public List<BoardDTO> getBoardSearch(Map<String, String> map);
-
 	public BoardPaging boardPaging(String pg);
 	
 	public BoardPaging boardPaging(Map<String, String> map);
+	
+	// 찾기 
+	public List<BoardDTO> getBoardSearch(Map<String, String> map);
+
+
+	public BoardDTO getBoardView(String seq);
+
+	public void boardReply(Map<String, String> map);
+
 
 }

@@ -1,3 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<img src="../image/team.gif" width="200" height="200">
+    
+<link rel="stylesheet" href="../css/template.css">
+<img alt="pic" src="../image/pickle_rick.png" width=26% height=43%>

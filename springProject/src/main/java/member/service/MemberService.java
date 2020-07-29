@@ -12,6 +12,8 @@ public interface MemberService {
 
 	public String checkId(String id);
 
+	public ZipcodeDTO checkPost();
+
 	public List<ZipcodeDTO> postSearch(Map<String, String> map);
 
 	public void write(MemberDTO memberDTO);
@@ -19,5 +21,5 @@ public interface MemberService {
 	public MemberDTO getMember(String id);
 
 	public void modify(MemberDTO memberDTO);
-
+	
 }

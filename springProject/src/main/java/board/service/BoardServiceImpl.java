@@ -19,31 +19,65 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO boardDAO;
 	@Autowired
 	private HttpSession session;
+	//이제 세션을 여기서 불러서 실어준다. 
 	@Autowired
 	private BoardPaging boardPaging;
-
+	
 	@Override
 	public void boardWrite(Map<String, String> map) {
-		map.put("id", (String)session.getAttribute("memId"));
-		map.put("name", (String)session.getAttribute("memName"));
-		map.put("email", (String)session.getAttribute("memEmail"));
+		map.put("id", (String) session.getAttribute("memId"));
+		map.put("name", (String) session.getAttribute("memName"));
+		map.put("email", (String) session.getAttribute("memEmail"));
 		
 		boardDAO.boardWrite(map);
+		
 	}
-
+	
+	// 한페이지당 글 5개 
+	// 그러기 위해선 startNum과 endNum이 있어야 끊어서 가져온다. 
 	@Override
 	public List<BoardDTO> getBoardList(String pg) {
-		//1페이지당 5개씩
+		// controller에서가 아닌 일은 service에서 
 		int endNum = Integer.parseInt(pg)*5;
-		int startNum = endNum-4;
+		int startNum = endNum - 4;
 		
-		Map<String,Integer> map = new HashMap<String,Integer>();
+		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("startNum", startNum);
 		map.put("endNum", endNum);
 		
 		return boardDAO.getBoardList(map);
 	}
-
+	
+	// 페이징 처리 
+	@Override
+	public BoardPaging boardPaging(String pg) {
+		// 총 글 수 얻어오기 
+		int totalA = boardDAO.getBoardTotalA();
+		boardPaging.setCurrentPage(Integer.parseInt(pg)); //현재 페이지 넣어준다. 
+		// currentpage는 int 형이기 때문에 타입 오류 나므로 형변환해줌
+		boardPaging.setPageBlock(3); // 3블럭씩 끊어줌
+		boardPaging.setPageSize(5); // 5개씩
+		boardPaging.setTotalA(totalA);
+		boardPaging.makePagingHTML();
+		
+		return boardPaging;
+	}
+	
+	@Override
+	public BoardPaging boardPaging(Map<String, String> map) {
+		
+		int totalA = boardDAO.getBoardSearchTotalA(map);
+		
+		boardPaging.setCurrentPage(Integer.parseInt(map.get("pg"))); //현재 페이지 넣어준다. 
+		// currentpage는 int 형이기 때문에 타입 오류 나므로 형변환해줌
+		boardPaging.setPageBlock(3); // 3블럭씩 끊어줌
+		boardPaging.setPageSize(5); // 5개씩
+		boardPaging.setTotalA(totalA);
+		boardPaging.makePagingHTML();
+		
+		return boardPaging;
+	}
+	// 검색
 	@Override
 	public List<BoardDTO> getBoardSearch(Map<String, String> map) {
 		//1페이지당 5개씩
@@ -57,39 +91,28 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardPaging boardPaging(String pg) {
-		int totalA = boardDAO.getBoardTotalA();//총글수
+	public BoardDTO getBoardView(String seq) {
 		
-		boardPaging.setCurrentPage(Integer.parseInt(pg));
-		boardPaging.setPageBlock(3);
-		boardPaging.setPageSize(5);
-		boardPaging.setTotalA(totalA);
-		boardPaging.makePagingHTML();
-		return boardPaging;
+		return boardDAO.getBoardView(seq);
 	}
-	
+
+	// 덧글  
 	@Override
-	public BoardPaging boardPaging(Map<String, String> map) {
-		int totalA = boardDAO.getBoardSearchTotalA(map);//총글수
+	public void boardReply(Map<String, String> map) {
+		// 원글 (한 사람 글 가져오기)
+		BoardDTO pDTO = boardDAO.getBoardView(map.get("pseq"));
 		
-		boardPaging.setCurrentPage(Integer.parseInt(map.get("pg")));
-		boardPaging.setPageBlock(3);
-		boardPaging.setPageSize(5);
-		boardPaging.setTotalA(totalA);
-		boardPaging.makePagingHTML();
-		return boardPaging;
+		// 원글에 이미 있는 pseq, pg, subject, content
+		map.put("id", (String)session.getAttribute("memId"));
+		map.put("name", (String)session.getAttribute("memName"));
+		map.put("email", (String)session.getAttribute("memEmail"));
+		// 덧글이기 때문에 누가 쓴 글에 덧글을 쓰는지 ㅇ라아야한다. 
+		
+		map.put("ref", pDTO.getRef() +"" ); // 원글 그룹번호
+		map.put("lev", pDTO.getLev()+ ""); // 원글 lev + 1
+		map.put("step", pDTO.getStep()+ "");// 원글 step + 1
+		
+		boardDAO.boardReply(map);
+		
 	}
-
-	
 }
-
-
-
-
-
-
-
-
-
-
-
