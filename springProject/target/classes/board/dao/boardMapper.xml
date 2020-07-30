@@ -86,4 +86,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			update board set reply=reply+1 where seq=#{pseq};
 		end;
 	</insert>
+	
+	<!-- 글 수정 -->
+	<update id="boardModify" parameterType="java.util.Map">
+		update board set subject=#{subject}, content=#{content}, logtime=SYSDATE
+ 		where seq=#{seq}
+	</update>
+	<!-- 글삭제 -->
+	<delete id="boardDelete" parameterType="int">
+		begin
+			update board set reply = reply-1 where seq=(select pseq from board where seq=#{seq});
+			update board set subject='[원글이 삭제된 답글]' || subject where pseq=#{seq};
+			delete board where seq=#{seq};
+		end; 
+	</delete>
 </mapper>

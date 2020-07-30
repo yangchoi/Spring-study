@@ -44,10 +44,13 @@ function mode(num){
 	}
 	if(num == 2){
 		// 글 삭제
-		document.boardViewForm.method = 'post'; // 어떤 형태로 이동할 건지 
-		document.boardViewForm.action = 'boardDelete'; // 어디로 이동할 건지
-		// 삭제 전 비밀번호 입력받고 싶으면 form을 따로 만들면 된다. 
-		document.boardViewForm.submit(); // 데이터 들고 이동
+		if(confirm("삭제? ")){
+			document.boardViewForm.method = 'post'; // 어떤 형태로 이동할 건지 
+			document.boardViewForm.action = 'boardDelete'; // 어디로 이동할 건지
+			// 삭제 전 비밀번호 입력받고 싶으면 form을 따로 만들면 된다. 
+			document.boardViewForm.submit(); // 데이터 들고 이동
+		}
+		
 		
 	}
 	if(num == 3){

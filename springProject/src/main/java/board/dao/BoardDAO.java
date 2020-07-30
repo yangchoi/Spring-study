@@ -20,4 +20,8 @@ public interface BoardDAO {
 	public BoardDTO getBoardView(String seq);
 
 	public void boardReply(Map<String, String> map);
+
+	public void boardModify(Map<String, Object> map);
+
+	public void boardDelete(String seq);
 }

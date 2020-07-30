@@ -129,18 +129,7 @@ public class BoardController {
 		
 		return mav;
 	}
-	
-	/*
-	// 글 삭제 
-	@RequestMapping(value="boardDelete", method=RequestMethod.POST)
-	public String boardDelete(@RequestParam String seq, @RequestParam String pg, Model model) {
-		model.addAttribute("seq", seq);
-		model.addAttribute("pg", pg);
-		model.addAttribute("display", "/board/boardView.jsp");
 
-		return "/main/index";
-	}
-	*/
 	
 	// 댓글
 	@RequestMapping(value="boardReplyForm", method=RequestMethod.POST)
@@ -166,4 +155,33 @@ public class BoardController {
 		
 		return "/main/index";
 	}
+	
+	// 글 수정 
+	@RequestMapping(value="boardModifyForm", method=RequestMethod.POST)
+	public String boardModifyForm(@RequestParam String seq, @RequestParam String pg, Model model) {
+		
+		model.addAttribute("seq", seq);
+		model.addAttribute("pg", pg);
+		model.addAttribute("display", "/board/boardModifyForm.jsp");
+		
+		return "/main/index";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="boardModify", method=RequestMethod.POST)
+	public void boardModify(@RequestParam Map<String, Object> map, Model model) {
+		boardService.boardModify(map);
+
+	}
+	// 글 삭제는 form 필요없음 
+	// 글 삭제 
+	@RequestMapping(value="boardDelete", method=RequestMethod.POST)
+	public String boardDelete(@RequestParam String seq, Model model) {
+		boardService.boardDelete(seq);
+
+		model.addAttribute("display", "/board/boardDelete.jsp");
+
+		return "/main/index";
+	}
+
 }

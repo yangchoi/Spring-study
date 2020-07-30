@@ -89,6 +89,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		return boardDAO.getBoardSearch(map);
 	}
+	
 
 	@Override
 	public BoardDTO getBoardView(String seq) {
@@ -113,6 +114,20 @@ public class BoardServiceImpl implements BoardService {
 		map.put("step", pDTO.getStep()+ "");// 원글 step + 1
 		
 		boardDAO.boardReply(map);
+		
+	}
+	
+	// 글 수정
+	@Override
+	public void boardModify(Map<String, Object> map) {
+		boardDAO.boardModify(map);
+		
+		
+	}
+
+	@Override
+	public void boardDelete(String seq) {
+		boardDAO.boardDelete(seq);
 		
 	}
 }
