@@ -24,4 +24,6 @@ public interface BoardDAO {
 	public void boardModify(Map<String, Object> map);
 
 	public void boardDelete(String seq);
+
+	public void boardHit(String seq);
 }

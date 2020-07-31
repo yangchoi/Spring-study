@@ -15,4 +15,9 @@
 	<context:component-scan base-package="board.service" />
 	<context:component-scan base-package="board.dao" />
 	<context:component-scan base-package="board.bean" />
+	
+	<context:component-scan base-package="imageBoard.service" />
+	<context:component-scan base-package="imageBoard.dao" />
+	<context:component-scan base-package="imageBoard.bean" />
+	
 </beans>

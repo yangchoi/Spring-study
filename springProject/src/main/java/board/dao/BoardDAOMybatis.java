@@ -69,5 +69,11 @@ public class BoardDAOMybatis implements BoardDAO{
 		sqlSession.delete("boardSQL.boardDelete", Integer.parseInt(seq));
 		
 	}
+
+	@Override
+	public void boardHit(String seq) {
+		sqlSession.update("boardSQL.boardHit", Integer.parseInt(seq));
+		
+	}
 	
 }

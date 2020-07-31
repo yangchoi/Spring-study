@@ -130,4 +130,11 @@ public class BoardServiceImpl implements BoardService {
 		boardDAO.boardDelete(seq);
 		
 	}
+
+	// 조회주 증가 
+	@Override
+	public void boardHit(String seq) {
+		boardDAO.boardHit(seq);
+		
+	}
 }

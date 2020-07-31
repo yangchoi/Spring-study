@@ -28,5 +28,7 @@ public interface BoardService {
 
 	public void boardDelete(String seq);
 
+	public void boardHit(String seq);
+
 
 }

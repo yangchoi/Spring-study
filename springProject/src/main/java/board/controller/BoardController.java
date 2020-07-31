@@ -3,11 +3,14 @@ package board.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,12 +64,21 @@ public class BoardController {
 	// 페이징 처리도 여기서 한다. 
 	@ResponseBody
 	@RequestMapping(value="getBoardList", method=RequestMethod.POST)
-	public ModelAndView getBoardList(@RequestParam String pg, HttpSession session) {
+	public ModelAndView getBoardList(@RequestParam String pg, HttpSession session, HttpServletResponse response) {
 		// 여기서는 required는 있어도 그만 없어도 그만 
 		
 		String memId = (String) session.getAttribute("memId");
 		
-		
+		// 쿠키 (조회수 용) - 쿠키는 클라이언트로 보내줘야한다 (클라이언트에 저장)
+		if(memId != null) { // 세션값이 존재할 때만 쿠키를 만든다. 
+			Cookie cookie = new Cookie("memHit", "ok"); // (쿠키명, 쿠키에 저장할 값)
+			cookie.setMaxAge(30*60); // 30분 동안 쿠키 유지 
+			cookie.setPath("/"); // 어떤 경로든 쿠키가 들어올 수 있게 
+			
+			response.addCookie(cookie); // 쿠키를 클라이언트에게 보낸다. 
+		}
+	
+			
 		// 한 페이지 당 글 5개
 		List<BoardDTO> list = boardService.getBoardList(pg);
 		
@@ -119,12 +131,30 @@ public class BoardController {
 	}
 	
 	// 글보기 
-	@RequestMapping(value="getBoardView", method=RequestMethod.POST)
-	public ModelAndView getBoardView(@RequestParam String seq) {
+	@RequestMapping(value="getBoardView", method=RequestMethod.POST) // 쿠키값을 가져온다. 쿠키가 없는 경우도 알려준다. 
+	public ModelAndView getBoardView(@RequestParam String seq, 
+									@CookieValue(value="memHit", required=false) Cookie cookie, 
+									HttpServletResponse response, HttpSession session) {
+		
+		String memId = (String)session.getAttribute("memId");
+		
+		// 쿠키 - 조회수 증가 
+		System.out.println(cookie); // 16진수 레퍼런스 값으로 나옴 
+		if(cookie != null) {
+			// 쿠키 있을 때 조회수 증가
+			boardService.boardHit(seq);
+			
+			// 조회수 증가시키면 쿠키 삭제 
+			cookie.setMaxAge(0); // MAXAGE 0으로 하고
+			cookie.setPath("/"); // 모든 경로에서 그렇게 하고
+			response.addCookie(cookie); // 클라이언트에게 이 사실을 알린다. 
+		}
 		
 		BoardDTO boardDTO = boardService.getBoardView(seq); // 딱 하나의 데이터만 가지고 옴
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("boardDTO", boardDTO); // boardDTO 보내기 
+		mav.addObject("memId", memId);
 		mav.setViewName("jsonView");
 		
 		return mav;

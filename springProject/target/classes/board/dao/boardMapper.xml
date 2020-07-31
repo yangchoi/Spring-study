@@ -100,4 +100,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			delete board where seq=#{seq};
 		end; 
 	</delete>
+	<!--  조회수 증가 -->
+	<update id="boardHit" parameterType="int">
+		update board set hit = hit+1 where seq = #{seq}
+	</update>
 </mapper>
